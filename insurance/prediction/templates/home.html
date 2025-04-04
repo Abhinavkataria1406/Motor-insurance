@@ -1,0 +1,215 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Claim Prediction</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <style>
+        body {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .card-body {
+            padding: 25px;
+        }
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .btn-primary {
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        .btn-primary:hover {
+            background-color: #3367d6;
+        }
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .alert-success {
+            background-color: #e6f7ee;
+            border: 1px solid #a3e9c4;
+            color: #2e7d32;
+        }
+        .alert-warning {
+            background-color: #fff8e1;
+            border: 1px solid #ffe082;
+            color: #ff8f00;
+        }
+        #resultCard {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Insurance Claim Prediction</h1>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Enter Insurance Details</h5>
+                <form id="predictionForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="Exposure">Exposure Time (0-1)</label>
+                                <input type="number" class="form-control" id="Exposure" name="Exposure" step="0.01" min="0" max="1" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="Area">Area (e.g., Urban, Suburban, Rural)</label>
+                                <input type="text" class="form-control" id="Area" name="Area" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="VehPower">Vehicle Power (kW)</label>
+                                <input type="number" class="form-control" id="VehPower" name="VehPower" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="VehAge">Vehicle Age (years)</label>
+                                <input type="number" class="form-control" id="VehAge" name="VehAge" min="0" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="DrivAge">Driver Age (years)</label>
+                                <input type="number" class="form-control" id="DrivAge" name="DrivAge" min="18" required>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="BonusMalus">Bonus Malus (0-100)</label>
+                                <input type="number" class="form-control" id="BonusMalus" name="BonusMalus" min="0" max="100" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="VehBrand">Vehicle Brand (e.g., B1, B2, B3)</label>
+                                <input type="text" class="form-control" id="VehBrand" name="VehBrand" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="VehGas">Vehicle Fuel Type (e.g., Diesel, Petrol)</label>
+                                <input type="text" class="form-control" id="VehGas" name="VehGas" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="Density">Population Density (people/km²)</label>
+                                <input type="number" class="form-control" id="Density" name="Density" step="0.01" min="0" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="Region">Region (e.g., R11, R24, R31)</label>
+                                <input type="text" class="form-control" id="Region" name="Region" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary mt-3">Predict Claim Probability</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card" id="resultCard">
+            <div class="card-body">
+                <h5 class="card-title">Prediction Result</h5>
+                <div id="resultContent">
+                    <div class="alert" id="resultAlert">
+                        <h4 id="resultMessage"></h4>
+                        <p>Claim Probability: <span id="resultProbability"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const params = new URLSearchParams();
+            
+            for (const [key, value] of formData.entries()) {
+                params.append(key, value);
+            }
+            
+            // Show loading state
+            const submitBtn = document.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Predicting...';
+            
+            // Make API request
+            fetch(`/predict/?${params.toString()}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(`Error: ${data.error}`);
+                        return;
+                    }
+                    
+                    // Display results
+                    document.getElementById('resultCard').style.display = 'block';
+                    document.getElementById('resultMessage').textContent = data.message;
+                    document.getElementById('resultProbability').textContent = `${(data.claim_probability * 100).toFixed(2)}%`;
+                    
+                    // Set alert class based on prediction
+                    const alertElement = document.getElementById('resultAlert');
+                    if (data.claim_predicted === 1) {
+                        alertElement.className = 'alert alert-warning';
+                        alertElement.querySelector('h4').textContent = 'High Claim Risk Detected';
+                    } else {
+                        alertElement.className = 'alert alert-success';
+                        alertElement.querySelector('h4').textContent = 'Low Claim Risk Detected';
+                    }
+                })
+                .catch(error => {
+                    alert(`Error: ${error.message}`);
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Predict Claim Probability';
+                });
+        });
+    </script>
+</body>
+</html>
