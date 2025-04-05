@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-u!it&9_r&fjmp5@7$xdzmuz)c3gw0wbmi#vg-(y9=06i28_hq-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ["motor-insurance.onrender.com"]
+ALLOWED_HOSTS = ["motor-insurance.onrender.com", "127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -47,6 +47,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",  # If you're keeping static files in a 'static' directory
 ]
+
+# Later in the file
+STATIC_URL = 'static/'  # Note: this is missing the leading slash
 # Add this to your settings.py file
 
 import os
