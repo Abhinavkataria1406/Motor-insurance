@@ -1,3 +1,5 @@
+MVP Link - https://motor-insurance.onrender.com/
+
 # Insurance Claim Prediction API
 
 A Django-based web application that predicts the likelihood of insurance claims based on policy and vehicle information. This project implements a binary classification model that determines whether a policy is likely to have a claim.
