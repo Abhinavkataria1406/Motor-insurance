@@ -20,24 +20,37 @@ This application uses machine learning to predict whether an insurance policy wi
 ## Project Structure
 
 ```
-insurance-claim-predictor/
-│
-├── models/                      # Directory to store ML models
-│   ├── insurance_model.pkl      # Trained machine learning model
-│
-├── prediction/                  # Django app
-│   ├── __init__.py
-│   ├── models.py                # Database models
-│   ├── views.py                 # API endpoints and view functions
-│   ├── urls.py                  # URL routing
-│   ├── templates/               # HTML templates
-│   │   └── home.html            # Main prediction interface
-│
-├── train_model.py               # Script to train and save the model
-├── insurance_data.csv           # Dataset (not included in repository)
-├── manage.py                    # Django management script
-├── requirements.txt             # Project dependencies
-└── README.md                    # This file
+ README.md
+└── insurance
+    ├── Procfile
+    ├── freMTPL2freq.csv
+    ├── insurance
+    │   ├── __init__.py
+    │   ├── asgi.py
+    │   ├── settings.py
+    │   ├── urls.py
+    │   └── wsgi.py
+    ├── manage.py
+    ├── models
+    │   └── insurance_model.pkl
+    ├── prediction
+    │   ├── __init__.py
+    │   ├── admin.py
+    │   ├── apps.py
+    │   ├── migrations
+    │   │   ├── 0001_initial.py
+    │   │   └── __init__.py
+    │   ├── models.py
+    │   ├── templates
+    │   │   └── home.html
+    │   ├── tests.py
+    │   ├── urls.py
+    │   └── views.py
+    ├── requirements.txt
+    ├── static
+    │   └── css
+    │       └── style.css
+    └── train_model.py
 ```
 
 ## Installation
