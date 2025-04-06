@@ -131,9 +131,9 @@ SAMPLE_FRACTION = 0.1  # Uses 10% of the data
 
 ## Performance Considerations
 
-- With 678,000 entries in the full dataset, training can take several hours on standard hardware
-- Consider using a subset of the data for initial development
-- The final model should be trained on the complete dataset for production use
+- With 678,000 entries in the full dataset, training would have taken several hours on standard hardware
+- Used a subset of the data for initial development
+- The final model will be trained on the complete dataset for production use
 
 ## Requirements
 
@@ -150,7 +150,8 @@ SAMPLE_FRACTION = 0.1  # Uses 10% of the data
 
 ## Future Improvements
 
-- Add user authentication
+- Add user authentication (Firebase Integration)
+- Gemini chatbot for better customer interaction
 - Implement model versioning
 - Add feature importance visualization
 - Include more advanced models (e.g., XGBoost, neural networks)
